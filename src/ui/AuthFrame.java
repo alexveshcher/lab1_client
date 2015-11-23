@@ -7,7 +7,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 
+
+
 import javax.swing.*;
+
+import daointerface.DAO;
 
 
 
@@ -18,11 +22,16 @@ public class AuthFrame extends JFrame {
     JRadioButton studentButton;
     JTextField loginField;
     JButton loginButton;
+    
+    DAO dao;
+    
+    public static int studentID=-1;
 
 
     //int selectedBookRow = -1;
 
-    public AuthFrame() {
+    public AuthFrame(DAO dao) {
+    	this.dao = dao;
         this.setLocation(100, 100);
         this.setSize(300, 500);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -33,12 +42,14 @@ public class AuthFrame extends JFrame {
         group.add(librarianButton);
         panel1.add(librarianButton);
         
-        studentButton = new JRadioButton("student");
+        studentButton = new JRadioButton("student",true);
         group.add(studentButton);
         panel1.add(studentButton);
+        
 
         loginField = new JTextField(20);
-        loginField.setText("Login");
+        loginField.setText("type your login");
+        //loginField.setEnabled(false);
         panel1.add(loginField);
 
         loginButton = new JButton("login");
@@ -52,15 +63,31 @@ public class AuthFrame extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 loginField.setText("");
             }
+            public void mousePressed(MouseEvent e) {
+                loginField.setText("");
+           }
         });
+        
+        loginButton.addActionListener(new ActionListener() {
+
+            //action on clicking LOGIN button
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+            	
+                if(studentButton.isSelected()==true){
+                	studentID = Integer.parseInt(loginField.getText());
+                	new StudentFrame(dao);
+                }
+                else new LibrarianFrame(dao);
+               dispose();
+            }
+        });
+        
         this.add(panel1);
         this.setVisible(true);
     }
 
  
     
-    public static void main(String[] args){
-    	new AuthFrame();
-    }
 
 }

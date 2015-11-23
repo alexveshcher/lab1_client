@@ -110,6 +110,7 @@ public class StudentFrame extends JFrame {
 
         Order ord = new Order();
         ord.setBook(bookList.get(selectedBookRow));
+        ord.setStudent(AuthFrame.studentID);
         try {
             dao.makeOrder(ord);
         } catch (SQLException | RemoteException e) {
